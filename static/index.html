@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RawDrop • TikTok Stream Extractor</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="ambient-glow"></div>
+
+  <div class="app-canvas">
+    
+    <!-- Верхняя системная полоса -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <span class="status-indicator-dot"></span>
+        <span class="status-text">TikTok Pipeline Ready</span>
+      </div>
+
+      <div class="nav-right">
+        <button id="openFolderHeaderBtn" class="nav-ghost-btn" title="Open Downloads Folder">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Downloads</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Основная рабочая область -->
+    <div class="main-stage">
+      
+      <!-- ЛЕВАЯ КОЛОНКА (Логотип, история, инпут снизу) -->
+      <aside class="stage-left">
+        <div class="brand-hero">
+          <h1 class="brand-title">RawDrop</h1>
+          <p class="brand-tagline">Direct TikTok stream extraction without watermark</p>
+        </div>
+
+        <!-- Недавние загрузки -->
+        <div class="timeline-container">
+          <div class="timeline-header">
+            <span class="timeline-title">RECENT EXTRACTIONS</span>
+            <span class="timeline-badge" id="historyCount">0 saved</span>
+          </div>
+
+          <div class="timeline-feed" id="historyFeed">
+            <!-- Элементы истории инжектятся через JavaScript -->
+          </div>
+        </div>
+
+        <!-- Поле ввода -->
+        <div class="input-pod" id="inputPod">
+          <div class="pod-input-row">
+            <input 
+              type="text" 
+              id="urlInput" 
+              placeholder="Enter TikTok video link..." 
+              autocomplete="off" 
+              spellcheck="false"
+            >
+          </div>
+
+          <div class="pod-actions-row">
+            <button id="pasteBtn" class="pod-btn-paste" title="Paste link from clipboard">
+              <span>Paste</span>
+              <span class="btn-arrow">&gt;</span>
+            </button>
+
+            <!-- Прогресс скачивания -->
+            <div class="pod-progress-slot hidden" id="podProgressSlot">
+              <div class="pod-progress-track">
+                <div class="pod-progress-bar" id="podProgressBar" style="width: 0%"></div>
+              </div>
+              <span class="pod-progress-text" id="podProgressText">0%</span>
+            </div>
+
+            <!-- Кнопка отправки -->
+            <button id="fetchBtn" class="pod-btn-submit" title="Execute Extraction">
+              <svg class="submit-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+              </svg>
+              <span class="spinner hidden"></span>
+            </button>
+          </div>
+
+          <div id="errorBox" class="pod-error-toast hidden">
+            <span id="errorMessage"></span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ПРАВАЯ ОБЛАСТЬ (Вертикальный пайплайн с разноразмерными блоками) -->
+      <section class="stage-right">
+        <div class="pipeline-container pipeline-stack" id="pipelineViewport">
+          
+          <!-- Узел 1: Source (Широкий) -->
+          <div class="graph-node node-pill node-root node-wide" id="nodeRoot">
+            <span class="node-indicator"></span>
+            <div class="node-content">
+              <span class="node-type">SOURCE</span>
+              <span class="node-label" id="nodeRootLabel">Idle (Waiting for link)</span>
+            </div>
+          </div>
+
+          <!-- Узел 2: Resolve (Компактный) -->
+          <div class="graph-node node-pill node-tier-item node-compact" id="nodeRedirect">
+            <span class="node-indicator"></span>
+            <div class="node-content">
+              <span class="node-type">RESOLVE</span>
+              <span class="node-label">Shortlink</span>
+            </div>
+          </div>
+
+          <!-- Узел 3: CDN (Компактный) -->
+          <div class="graph-node node-pill node-tier-item node-compact" id="nodeBypass">
+            <span class="node-indicator"></span>
+            <div class="node-content">
+              <span class="node-type">STREAM</span>
+              <span class="node-label">Clean CDN</span>
+            </div>
+          </div>
+
+          <!-- Узел 4: Quality (Компактный) -->
+          <div class="graph-node node-pill node-tier-item node-compact" id="nodeQuality">
+            <span class="node-indicator"></span>
+            <div class="node-content">
+              <span class="node-type">QUALITY</span>
+              <span class="node-label">1080p Pure</span>
+            </div>
+          </div>
+
+          <!-- Узел 5: Storage (Широкий) -->
+          <div class="graph-node node-pill node-output node-wide" id="nodeStorage">
+            <span class="node-indicator"></span>
+            <div class="node-content">
+              <span class="node-type">OUTPUT</span>
+              <span class="node-label" id="nodeStorageLabel">Local Storage</span>
+            </div>
+          </div>
+
+          <!-- Карточка предпросмотра -->
+          <div class="preview-flyout hidden" id="previewFlyout">
+            <div class="flyout-cover">
+              <img id="videoCover" src="" alt="Cover">
+              <span id="videoDuration" class="flyout-duration">00:00</span>
+            </div>
+            <div class="flyout-meta">
+              <span class="flyout-author" id="videoAuthor">@creator</span>
+              <h3 class="flyout-title" id="videoTitle">Video Title</h3>
+              <div class="flyout-actions">
+                <button id="instantDownloadBtn" class="btn-flyout-download">
+                  <span>Start Extraction</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Футер -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span class="engine-badge">Engine: yt-dlp Core</span>
+        <span class="footer-dot">•</span>
+        <span class="status-clean">No Watermark Guaranteed</span>
+      </div>
+
+      <div class="footer-right">
+        <span class="credits-text">Designed & built by</span>
+        <a href="https://github.com/inf04hex" target="_blank" class="author-badge" id="authorLink">
+          <svg class="github-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span id="authorName">@inf04hex</span>
+        </a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

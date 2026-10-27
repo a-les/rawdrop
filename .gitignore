@@ -1,0 +1,25 @@
+# Python & Virtual Environments
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.spec.bak
+
+# PyInstaller Build and Executable
+# Note: RawDrop.exe (26MB) should be published via GitHub Releases rather than committed directly into git history
+build/
+dist/
+*.manifest
+
+# User Downloads (keeps directory, ignores files)
+downloads/*
+!downloads/.gitkeep
+
+# System & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
