@@ -1,4 +1,4 @@
-package com.inf04hex.rawdrop
+package com.ales.rawdrop
 
 import android.content.ContentValues
 import android.content.Context

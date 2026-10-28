@@ -1,4 +1,4 @@
-package com.inf04hex.rawdrop
+package com.ales.rawdrop
 
 import android.content.ClipboardManager
 import android.content.Context

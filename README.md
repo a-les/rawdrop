@@ -30,19 +30,19 @@
 ### Installation & Usage
 
 #### 💻 Windows Desktop
-1. Download `RawDrop.exe` from [Releases](https://github.com/inf04hex/rawdrop/releases).
+1. Download `RawDrop.exe` from [Releases](https://github.com/a-les/rawdrop/releases).
 2. Run `RawDrop.exe`.
 3. Paste a TikTok URL (supports standard and short `vt.tiktok.com` links) and click **Download**. Videos are saved into the `downloads/` directory next to the application.
 
 #### 📱 Android App
-1. Download `RawDrop.apk` from [Releases](https://github.com/inf04hex/rawdrop/releases) or the Actions build tab.
+1. Download `RawDrop.apk` from [Releases](https://github.com/a-les/rawdrop/releases) or the Actions build tab.
 2. Install the `.apk` on your phone.
 3. Use in-app or simply tap **Share ➔ RawDrop** inside TikTok. The video saves automatically to your phone's Gallery (`Movies/RawDrop`).
 
 #### Run from Source (Optional)
 ```bash
 # Windows Desktop
-git clone https://github.com/inf04hex/rawdrop.git
+git clone https://github.com/a-les/rawdrop.git
 cd rawdrop
 pip install -r requirements.txt
 python run_desktop.py
@@ -66,19 +66,19 @@ python run_desktop.py
 ### Установка и запуск
 
 #### 💻 Windows (Десктоп)
-1. Скачайте `RawDrop.exe` из раздела [Releases](https://github.com/inf04hex/rawdrop/releases).
+1. Скачайте `RawDrop.exe` из раздела [Releases](https://github.com/a-les/rawdrop/releases).
 2. Запустите `RawDrop.exe`.
 3. Вставьте ссылку на видео и нажмите **Download**. Видео сохранится в папку `downloads/` рядом с программой.
 
 #### 📱 Android (Телефон)
-1. Скачайте `RawDrop.apk` из раздела [Releases](https://github.com/inf04hex/rawdrop/releases) или вкладки Actions.
+1. Скачайте `RawDrop.apk` из раздела [Releases](https://github.com/a-les/rawdrop/releases) или вкладки Actions.
 2. Установите `.apk` на телефон.
 3. Скачивайте внутри приложения или нажимайте **«Поделиться» ➔ RawDrop** прямо в TikTok. Ролики сохраняются напрямую в Галерею.
 
 #### Запуск из исходного кода (для разработчиков)
 ```bash
 # Windows
-git clone https://github.com/inf04hex/rawdrop.git
+git clone https://github.com/a-les/rawdrop.git
 cd rawdrop
 pip install -r requirements.txt
 python run_desktop.py
@@ -88,4 +88,4 @@ python run_desktop.py
 
 ## License & Author
 * **License:** [MIT](LICENSE)
-* **Author:** [@inf04hex](https://github.com/inf04hex)
+* **Author:** [@a-les](https://github.com/a-les)

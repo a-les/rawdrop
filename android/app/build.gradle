@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.inf04hex.rawdrop'
+    namespace 'com.ales.rawdrop'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.inf04hex.rawdrop"
+        applicationId "com.ales.rawdrop"
         minSdk 24
         targetSdk 34
         versionCode 1
