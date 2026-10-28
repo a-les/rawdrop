@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RawDrop" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:statusBarColor">@color/bg_dark</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="colorPrimary">@color/flame_orange</item>
+        <item name="colorOnPrimary">@color/alabaster_white</item>
+        <item name="colorSurface">@color/card_dark</item>
+    </style>
+</resources>
