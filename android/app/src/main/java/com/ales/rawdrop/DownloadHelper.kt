@@ -18,8 +18,9 @@ import java.util.concurrent.TimeUnit
 class DownloadHelper(private val context: Context) {
 
     private val client = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(90, TimeUnit.SECONDS)
+        .followRedirects(true)
         .build()
 
     suspend fun downloadVideoToGallery(
@@ -29,8 +30,9 @@ class DownloadHelper(private val context: Context) {
         try {
             val request = Request.Builder()
                 .url(videoDetails.downloadUrl)
-                .header("User-Agent", "com.ss.android.ugc.trill/260103")
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
                 .header("Referer", "https://www.tiktok.com/")
+                .header("Accept", "*/*")
                 .build()
 
             val response = client.newCall(request).execute()
@@ -40,7 +42,11 @@ class DownloadHelper(private val context: Context) {
 
             val body = response.body ?: return@withContext Result.failure(Exception("Empty video stream"))
             val totalBytes = body.contentLength()
-            val fileName = "RawDrop_${videoDetails.videoId}_${System.currentTimeMillis()}.mp4"
+            
+            // Clean filename without invalid filesystem characters
+            val sanitizedTitle = videoDetails.title.replace(Regex("[^a-zA-Z0-9а-яА-ЯёЁ_\\-\\s]"), "").take(40).trim()
+            val baseName = if (sanitizedTitle.isNotEmpty()) sanitizedTitle else "RawDrop"
+            val fileName = "${baseName}_${videoDetails.videoId}.mp4"
 
             var outputStream: OutputStream? = null
             var savedUri: Uri? = null
@@ -74,7 +80,7 @@ class DownloadHelper(private val context: Context) {
 
             outputStream?.use { out ->
                 body.byteStream().use { input ->
-                    val buffer = ByteArray(8 * 1024)
+                    val buffer = ByteArray(16 * 1024)
                     var bytesRead: Long = 0
                     var read: Int
 

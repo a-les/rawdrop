@@ -159,10 +159,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun extractUrl(text: String): String? {
-        val pattern = Pattern.compile("https?://[a-zA-Z0-9./?=_%&~+-]+")
+        val pattern = Pattern.compile("https?://[^\\s\"'<>]+")
         val matcher = pattern.matcher(text)
         if (matcher.find()) {
-            val url = matcher.group(0)
+            var url = matcher.group(0)
+            url = url.trimEnd('.', ',', ')', ']', ';', '>')
             if (url.contains("tiktok.com")) {
                 return url
             }
